@@ -12,8 +12,7 @@ pyramid-debugtoolbar==2.2
 pyramid-mako==1.0.2
 pyramid-tm==0.7
 repoze.lru==0.6
-## !! Could not determine repository location
-src==0.0
+-e git+https://github.com/mdargan/weather.git@f5b7908024140b32039100d422879b486b50bcb4#egg=src-master
 transaction==1.4.3
 translationstring==1.1
 venusian==1.0
