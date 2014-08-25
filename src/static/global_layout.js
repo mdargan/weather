@@ -30,14 +30,17 @@ $(function() {
                     var start = new Date(Date.parse(val[0]));
                     var end = new Date(Date.parse(val[1]));
                     
-                    target.append('<div class="tile' + ' tile-' + key + '">'
+                    var tile = '<div class="tile' + ' tile-' + key + '">'
                         + '<div class="weather-text">'
                         + '     <span class="weather-title">' + key + '</span>'
-                        + '     <span>Start: ' + $.format.date(start, 'dd/MM/yyyy') + '</span>'
-                        + '     <span>End: ' + $.format.date(end, 'dd/MM/yyyy') + '</span>'
-                        + '     <span>' + val[2] + ' days streak</span>'
-                    
-                        + '</div>');
+                        + '     <span>Start: ' + $.format.date(start, 'dd/MM/yyyy') + '</span>';
+
+                     if(key != "current") {
+                        tile += '<span>End: ' + $.format.date(end, 'dd/MM/yyyy') + '</span>'
+                             + '<span>' + val[2] + ' days streak</span>';
+                     }                        
+                     tile += "</div>";
+                     target.append(tile);
                 });
             }
         });
@@ -48,7 +51,8 @@ $(function() {
         get_city_stats();
     });
 
-    $("#city").val(get_cookie("city_preset"));    
+    var city = get_cookie("city_preset");
+    $("#city").val(city.length > 0 ? city : "Moscow");
     get_city_stats();
 });
 
