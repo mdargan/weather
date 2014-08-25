@@ -45,8 +45,8 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
 
-	#Generate fake statistics for 3 years
-    DAYS = 365 * 3
+	#Generate fake statistics for 1 year
+    DAYS = 365 * 1
 
     #Init database with example list of cities
     with transaction.manager:
