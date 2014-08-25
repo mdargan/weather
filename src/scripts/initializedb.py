@@ -60,3 +60,4 @@ def main(argv=sys.argv):
                 is_clear = bool(random.getrandbits(1))
                 wr = WeatherRecord(city=city.id, date=d, is_clear=is_clear)
                 DBSession.add(wr)
+			DBSession.flush()
