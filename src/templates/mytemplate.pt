@@ -32,7 +32,7 @@
           </div>
           <div class="col-md-10">
             <div class="content">
-             <h1>Choose city:<h1>
+             <h1>Choose city:</h1>
              <select id="city">
              <option tal:repeat="city cities"
                     value="${city.name}">
@@ -40,7 +40,6 @@
             </option>
             </select>
             <div id="periods" class="tile-container">
-            <ul/>
             </div>
           </div>
         </div>
