@@ -54,10 +54,12 @@ def main(argv=sys.argv):
             city = City(name=c, owm_id=CITIES[c])
             DBSession.add(city)
             DBSession.flush()
+            print("Added city: " + city.name)            
             prev_y = datetime.datetime.now() - datetime.timedelta(DAYS)
-
+            
             for d in (prev_y + datetime.timedelta(n) for n in range(DAYS)):
                 is_clear = bool(random.getrandbits(1))
                 wr = WeatherRecord(city=city.id, date=d, is_clear=is_clear)
                 DBSession.add(wr)
-			DBSession.flush()
+                print("Added weather record: " + str(wr.date) + " " + wr.is_clear)                
+            DBSession.flush()
