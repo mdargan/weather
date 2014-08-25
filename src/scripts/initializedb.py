@@ -1,6 +1,8 @@
 import os
 import sys
 import transaction
+import datetime
+import random
 
 from sqlalchemy import engine_from_config
 
@@ -43,8 +45,18 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
 
+	#Generate fake statistics for 3 years
+    DAYS = 365 * 3
+
     #Init database with example list of cities
     with transaction.manager:
         for c in CITIES:
             city = City(name=c, owm_id=CITIES[c])
             DBSession.add(city)
+            DBSession.flush()
+            prev_y = datetime.datetime.now() - datetime.timedelta(DAYS)
+
+            for d in (prev_y + datetime.timedelta(n) for n in range(DAYS)):
+                is_clear = bool(random.getrandbits(1))
+                wr = WeatherRecord(city=city.id, date=d, is_clear=is_clear)
+                DBSession.add(wr)

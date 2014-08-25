@@ -2,7 +2,7 @@ $(function() {
 
     function get_city_stats() {
         var city = $("#city").val();
-        $.getJSON('/city_stats.json', function(data) {
+        $.getJSON("/city_stats.json?city=" + city, function(data) {
             var target = $('#stats ul');
             target.empty();
             $.each(data, function (key, val) {
