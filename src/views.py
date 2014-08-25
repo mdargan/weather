@@ -27,11 +27,14 @@ def city_stats_view(request):
         city = db.query(City).filter(City.name == city_param).first()
                    
         sql = """
-            SELECT streak_duration, date, since_previous
+            SELECT streak,
+            start,
+            start + streak as end
             FROM (SELECT date,
-                lead(date)  OVER (ORDER BY date) - date streak_duration,
+                lead(date)  OVER (ORDER BY date) - date streak,
                 since_previous,
-                before_next
+                before_next,
+                date as start
                 FROM (SELECT date, is_clear,
                        date - lag(date) OVER (ORDER BY date) since_previous,
                        lead(date) OVER (ORDER BY date) - date before_next
@@ -42,32 +45,29 @@ def city_stats_view(request):
                      ) dt 
                 
 		) dd 
-        WHERE streak_duration IS NOT NULL
-        ORDER BY streak_duration desc;
+        WHERE streak IS NOT NULL
+        ORDER BY streak desc;
         """
         #find the oldest weather record
         start_date = db.query(WeatherRecord).first().date
-        end_date = datetime.datetime.today()                          
+        end_date = datetime.date.today()                          
 
         #get overall longest clear sky period 
-        overall = db.query("streak_duration", "date").from_statement(sql).params(city_id=city.id,
+        overall = db.query("start", "end", "streak").from_statement(sql).params(city_id=city.id,
         start_date=start_date, end_date=end_date).first()
         
         #Current month clear sky period
         start_date =  datetime.date.today().replace(day=1)
-        month_all = db.query("streak_duration", "date").from_statement(sql).params(city_id=city.id,
+        month_all = db.query("start", "end", "streak").from_statement(sql).params(city_id=city.id,
         start_date=start_date, end_date=end_date).all()
         
         current_period = None        
               
-        #Determine if current date falls into any current month's clear streaks
+        #Determine if current date falls into any current month's clear streak
         for period in month_all:
-            streak = period[0]
-            date = period[1]
-            for date in (date + datetime.timedelta(days=n) for n in range(streak)):
-                if date == datetime.datetime.today():
-                    current_period = period
-                    break
+            if period[0] <= datetime.date.today() <= period[1]:
+                current_period = period
+                break
                       
         result = { 
             "result": "ok", 
@@ -80,7 +80,8 @@ def city_stats_view(request):
         return result
 
     except DBAPIError as e:
-        return { "result" : "error" }
+        #return { "result" : "error" }
+        pass
         
 
 conn_err_msg = """\

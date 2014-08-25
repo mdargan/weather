@@ -39,7 +39,7 @@
                 ${city.name}
             </option>
             </select>
-            <div id="stats">
+            <div id="periods" class="tile-container">
             <ul/>
             </div>
           </div>
@@ -55,5 +55,6 @@
     <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="${request.static_url('src:static/global_layout.js')}"></script>
+    <script src="${request.static_url('src:static/jquery-dateFormat.min.js')}"></script>
   </body>
 </html>

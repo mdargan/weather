@@ -3,7 +3,7 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
   color: #ffffff;
-  background: #3121bc;
+  background: #014051;
 }
 h1,
 h2,
@@ -27,7 +27,7 @@ p {
   font-weight: 700;
 }
 .starter-template {
-  margin-top: 250px;
+  margin-top: 150px;
 }
 .starter-template .content {
   margin-left: 10px;
@@ -94,6 +94,47 @@ p {
   right: 0;
 }
 
-#stats ul {
-	list-style-type: none;
+.tile-container{
+    height:120px;
+    margin-top: 20px;
+ }
+.tile{
+  width:250px;
+  height:inherit;
+  float:left;
+  margin: 5px;
+  padding: 5px;
 }
+
+
+.tile-overall {
+    background-color: #5e3ab8;
+}
+
+.tile-month {
+    background-color: #d44a26;
+}
+
+.tile-current {
+    background-color: #009f19;
+}
+
+
+.weather-text{
+  margin-left:10px;
+  margin-top:10px;
+  margin-bottom: 5px;
+  display:inline-block;
+  color:#e2e2e2;
+  font-family:helvetica, arial, sans-serif;
+  font-size:14px;
+}
+.weather-text span{
+  padding-left:10px;
+  display:block;
+}
+.weather-title {
+   text-transform: capitalize;
+  font-size:2.5em;
+}
+
