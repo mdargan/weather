@@ -1,6 +1,7 @@
 import os
 import json
 import datetime
+import time
 from urllib.request import urlopen
 
 from paste.deploy import appconfig
@@ -24,11 +25,10 @@ engine = engine_from_config(conf, 'sqlalchemy.')
 db.configure(bind=engine)
  
 
-def update_weather_data(city_id, start_dt=0):
-
-    #api_url = 'http://api.openweathermap.org/data/2.5/history/city?id=%d&type=day&start=%d' % (city_id, start_dt)
-    api_url = 'http://api.openweathermap.org/data/2.5/history/city?id=5322053&type=day&start=1405900800&end=1408579200'
-  
+def update_weather_data(city_id, start_dt):
+    
+    timestamp = time.mktime(start_dt.timetuple()) 
+    api_url = 'http://api.openweathermap.org/data/2.5/history/city?id=%d&type=day&start=%d' % (city_id, timestamp)
     response = urlopen(api_url)
     data = json.loads(response.read().decode())
 
@@ -45,26 +45,25 @@ def update_weather_data(city_id, start_dt=0):
             is_clear = len(cds) == 1 and 'Clear' in cds
             record = WeatherRecord(date=k, is_clear=is_clear)
             db.add(record)    
-	    
-    print(conditions) 
-    
+	       
 
 count = db.query(func.count(WeatherRecord.id)).first()[0] 
-
-now = datetime.datetime.utcnow()
+start_date = datetime.date.today()
 
 if count == 0:
     #We assume we running first time since database is empty
     #and will load all records for last year
-
-    year_ago = now - datetime.timedelta(days=365)
-    update_weather_data(2885679)	
+    start_date = start_date - datetime.timedelta(days=365)
 
 else:
 	#Perform incremental update from latest record
-	latest = db.query(WeatherRecord).order_by(WeatherRecord.date).first()
-	update_weather_data(latest.date, now)
-		
+    latest = db.query(WeatherRecord).order_by(WeatherRecord.date).first()
+    start_date = latest.date
+
+cities = db.query(City).all()
+for c in cities:    
+    update_weather_data(c.owm_id, start_date)	
+	
 	
  
 
