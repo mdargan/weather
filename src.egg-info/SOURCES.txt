@@ -3,8 +3,11 @@ MANIFEST.in
 README.txt
 development.ini
 production.ini
+requirements.txt
+runtime.txt
 setup.py
 src/__init__.py
+src/cron.py
 src/models.py
 src/tests.py
 src/views.py
@@ -17,8 +20,9 @@ src.egg-info/requires.txt
 src.egg-info/top_level.txt
 src/scripts/__init__.py
 src/scripts/initializedb.py
-src/static/pyramid-16x16.png
-src/static/pyramid.png
+src/static/global_layout.js
+src/static/jquery-dateFormat.min.js
+src/static/sun-xxl.png
 src/static/theme.css
 src/static/theme.min.css
 src/templates/mytemplate.pt

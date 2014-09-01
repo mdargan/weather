@@ -48,6 +48,12 @@ def city_stats_view(request):
         WHERE streak IS NOT NULL
         ORDER BY streak desc;
         """
+		
+        result = { 
+            "result": "ok", 
+            "list" : { }
+        }
+
         #find the oldest weather record
         start_date = db.query(WeatherRecord).first().date
         end_date = datetime.date.today()                          
@@ -55,12 +61,18 @@ def city_stats_view(request):
         #get overall longest clear sky period 
         overall = db.query("start", "end", "streak").from_statement(sql).params(city_id=city.id,
         start_date=start_date, end_date=end_date).first()
-        
+       
+        if overall:
+            result["list"]["overall"] = overall	
+
         #Current month clear sky period
         start_date =  datetime.date.today().replace(day=1)
         month_all = db.query("start", "end", "streak").from_statement(sql).params(city_id=city.id,
         start_date=start_date, end_date=end_date).all()
         
+        if month_all:
+            result["list"]["month"] = month[0]
+
         current_period = None        
               
         #Determine if current date falls into any current month's clear streak
@@ -68,11 +80,6 @@ def city_stats_view(request):
             if period[0] <= datetime.date.today() <= period[1]:
                 current_period = period
                 break
-                      
-        result = { 
-            "result": "ok", 
-            "list" : {"overall" : overall, "month" : month_all[0] }
-        }
 
         if current_period is not None:
             result["list"]["current"] = current_period                

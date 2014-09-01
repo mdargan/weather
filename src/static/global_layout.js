@@ -25,23 +25,32 @@ $(function() {
             else {
                 var target = $('#periods');
                 target.empty();
-                $.each(data["list"], function (key, val) {
-                        
-                    var start = new Date(Date.parse(val[0]));
-                    var end = new Date(Date.parse(val[1]));
-                    
-                    var tile = '<div class="tile' + ' tile-' + key + '">'
+				$.each(["overall", "month", "current"], function(idx, val) {
+										
+                    var tile = '<div class="tile' + ' tile-' + val + '">'
                         + '<div class="weather-text">'
-                        + '     <span class="weather-title">' + key + '</span>'
-                        + '     <span>Start: ' + $.format.date(start, 'dd/MM/yyyy') + '</span>';
+                        + '<span class="weather-title">' + val + '</span>';
 
-                     if(key != "current") {
-                        tile += '<span>End: ' + $.format.date(end, 'dd/MM/yyyy') + '</span>'
-                             + '<span>' + val[2] + ' days streak</span>';
-                     }                        
-                     tile += "</div>";
-                     target.append(tile);
-                });
+					if(val in data['list']) {
+						
+						var period = data['list'][val];
+                    	var start = new Date(Date.parse(period[0]));
+                    
+                        	tile += '<span>Start: ' + $.format.date(start, 'dd/MM/yyyy') + '</span>';
+						
+                     	if(val != "current") {
+								
+                    		var end = new Date(Date.parse(period[1]));
+                        	tile += '<span>End: ' + $.format.date(end, 'dd/MM/yyyy') + '</span>'
+                             	+ '<span>' + period[2] + ' days streak</span>';
+						}
+					} else {
+						tile += "<span>No data for " + val + " period</span>";			
+					}
+					
+                    tile += "</div></div>";
+                    target.append(tile);
+				});
             }
         });
     }
